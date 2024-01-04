@@ -29,12 +29,15 @@ export interface ValidatedInputState{
     value: string;
 }
 
+export interface Dob{
+    month: number;
+    day: number;
+    year: number;
+}
 
-export interface ValidatedInputState{
-    active: boolean;
-    valid: boolean;
-    typedIn:boolean;
-    labelActive:boolean;
-    labelColor:string;
-    value: string;
+
+export interface StyledNextButtonProps {
+    active: boolean
+    theme:Theme;
+    color:string;
 }

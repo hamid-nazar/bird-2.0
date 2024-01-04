@@ -27,9 +27,8 @@ export function displayIcon(step:number):React.ReactElement {
 export function iconClass(step:number):string {
 
     if(step === 4 || step === 6){
-        return "reg-step-counter-btn-disabled"
+        return "reg-step-counter-btn-disabled";
     }
-
     return "reg-step-counter-btn"
 }
 

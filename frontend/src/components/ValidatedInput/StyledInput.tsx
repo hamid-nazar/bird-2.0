@@ -12,7 +12,6 @@ export const StyledInputBox = styled.div<StyledInputProps>`
 `;
 
 
-
 export const StyledInputLabel = styled.span<StyledInputProps>`
     position: absolute;
     left: 10px;
