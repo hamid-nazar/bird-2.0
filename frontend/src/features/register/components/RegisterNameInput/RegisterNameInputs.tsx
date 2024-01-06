@@ -5,6 +5,7 @@ import { updateRegister } from '../../../../redux/Slices/RegisterSlice';
 import { AppDispatch } from '../../../../redux/Store';
 import { validateName } from '../../../../services/validators';
 
+import "./RegisterNameInput.css"
 
 
 interface RegisterNameInputsProps {
@@ -16,8 +17,7 @@ export default function RegisterNameInputs({firstName, lastName}:RegisterNameInp
 
   const[firstValid, setFirstValid] = useState<boolean>(true);
   const[lastValid, setLastValid] = useState<boolean>(true);
-  // const[firstNmae, setFirstNmae] = useState<string>("");
-  // const[lastName, setLastName] = useState<string>("");
+
 
   const dispatch:AppDispatch = useDispatch();
 
@@ -47,11 +47,31 @@ export default function RegisterNameInputs({firstName, lastName}:RegisterNameInp
 
   return (
     <div className='register-name-input'>
+      <div className='register-name-content'>
+        <ValidatedTextInput
+        valid={firstValid} 
+        name="firstName" 
+        label="First" 
+        changeValue={updateName} 
+        data={firstName}
+        attributes={{maxLength: 50}}
+        />
 
-      <ValidatedTextInput valid={firstValid} name="firstName" label="First" changeValue={updateName} data={firstName}/>
+        {firstValid?<></>: <span className='register-name-error'>What's your name?</span>}
+      </div>
 
-      <ValidatedTextInput valid={lastValid} name="lastName" label="Last" changeValue={updateName}  data={lastName}/>
+      <div className='register-name-content'>
+        <ValidatedTextInput 
+        valid={lastValid} 
+        name="lastName" 
+        label="Last" 
+        changeValue={updateName}  
+        data={lastName}
+        attributes={{maxLength: 50}}
+        />
 
+        {lastValid?<></>: <span className='register-name-error'>What's your name?</span>}
+      </div>
     </div>
   )
 }

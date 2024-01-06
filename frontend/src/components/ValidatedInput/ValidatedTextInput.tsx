@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { StyledInputBox, StyledInputLabel } from './StyledInput';
 import { determineValidedSelectStyle } from '../../utils/DetermineStylesUtil';
 
-
+import "./ValidatedInput.css"
 
 
 interface ValidatedTextInputProps {
@@ -16,7 +16,7 @@ interface ValidatedTextInputProps {
 
 
 
-export default function ValidatedTextInput({valid, name, label, changeValue,data}:ValidatedTextInputProps):React.ReactElement {
+export default function ValidatedTextInput({valid, name, label, changeValue,data, attributes}:ValidatedTextInputProps):React.ReactElement {
 
     const [value, setValue] = useState<string>(data? data: "");
     const[borderActive, setBorderActive] = useState<boolean>(false);
@@ -50,7 +50,7 @@ export default function ValidatedTextInput({valid, name, label, changeValue,data
     },[ valid, value, borderActive, labelActive,color]);
 
   return (
-    <div className='validated-text-input'>
+    <div className='validated-input'>
         <StyledInputBox active={borderActive} valid={valid}>
 
             <StyledInputLabel color={color} active={labelActive} valid={valid}>
@@ -64,8 +64,10 @@ export default function ValidatedTextInput({valid, name, label, changeValue,data
                 onBlur={focus}
                 onChange={update} 
                 value={data}
+                {...attributes}
             />
-
+            {attributes && attributes.maxLength && (borderActive || !valid)?
+             <span className='validated-input-remainder'>{value.length}/{attributes.maxLength}</span> : <></>}
         </StyledInputBox>
 
     </div>

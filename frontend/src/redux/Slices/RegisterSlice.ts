@@ -1,7 +1,6 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Dob } from "../../utils/GlobalInterfaces";
-import { stat } from "fs";
-
+import axios from "axios";
 
 
 
@@ -45,13 +44,40 @@ const initialState:RegisterSliceState = {
    
 }
 
+interface RegisterUser {
+    firstName: string;
+    lastName: string;
+    email: string;
+    dob: string;
+}
+
+
+export const registerUser = createAsyncThunk( "register/register", async(user:RegisterUser, thunkAPI) => {
+
+    try {
+        
+        const req = await axios.post("http://localhost:8000/auth/register", user);
+
+        return await req.data;
+
+    } catch (error) {
+
+        return thunkAPI.rejectWithValue(error);
+    }
+    
+})
+
+
+
+
 
 export const RegisterSlice =  createSlice({
     name: 'register',
     initialState,
+
     reducers: {
         updateRegister: (state, action: PayloadAction<UpdatePayload>) => {
-            console.log("Action: ", action)
+
             const {name, value} = action.payload
             
             if (name === "month" || name === "day" || name === "year") {
@@ -91,6 +117,33 @@ export const RegisterSlice =  createSlice({
                 return state;
             }
         }
+
+    },
+    
+    extraReducers: (builder) => {
+
+        builder.addCase(registerUser.pending, (state, action) => {
+            
+            state.loading = true;
+            return state;
+        });
+
+        builder.addCase(registerUser.fulfilled, (state, action) => {
+            
+            state.loading = false;
+            state.error = false;
+            state.step++;
+
+            return state;
+        });
+
+        builder.addCase(registerUser.rejected, (state, action) => {
+            
+            state.loading = false;
+            state.error = true;
+
+            return state;
+        });
 
     }
 });

@@ -1,5 +1,7 @@
 import React from "react";
 import {RegisterFormOne} from "../components/RegisterFormOne/RegisterFormOne";
+import { RegisterFormTwo } from "../components/RegisterFormTwo/RegisterFormTwo";
+import { RegisterFormThree } from "../components/RegisterFormThree/RegisterFormThree";
 
 
 
@@ -11,10 +13,9 @@ export function determineModalContent(step:number):React.ReactElement {
             return <RegisterFormOne/>
 
         case 2:
-            return <span>Registration step 2</span>
-
+            return <RegisterFormTwo/>
         case 3:
-            return <span>Registration step 3</span>
+            return <RegisterFormThree/>
 
         case 4:
             return <span>Registration step 4</span>

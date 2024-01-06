@@ -100,6 +100,7 @@ export function determineValidedSelectStyle (active:boolean, valid:boolean): str
     }
 
     return 'gray';
+
 }
 
 

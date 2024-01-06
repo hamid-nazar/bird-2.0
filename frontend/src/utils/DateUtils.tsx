@@ -1,3 +1,4 @@
+import { Dob } from "./GlobalInterfaces";
 
 
 
@@ -64,4 +65,10 @@ export function getYears(): React.ReactElement[] {
     }
 
     return options;
+}
+
+
+export function stringifyDate(date: Dob): string {
+    
+    return `${MONTHS[date.month].substring(0, 3)} ${date.day}, ${date.year}`
 }

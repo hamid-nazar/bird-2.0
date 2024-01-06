@@ -21,12 +21,3 @@ export const StyledNextButton = styled.button<StyledNextButtonProps>`
 
 
 
-
-
-export default function RegisterNextButton() {
-  return (
-    <div>RegisterNextButton</div>
-  )
-}
-
-

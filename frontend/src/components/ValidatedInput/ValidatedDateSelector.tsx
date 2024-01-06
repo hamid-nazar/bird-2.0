@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { StyledInputBox, StyledInputLabel } from './StyledInput';
 import { determineValidedSelectStyle } from '../../utils/DetermineStylesUtil';
-import { useDispatch } from 'react-redux';
-import { updateRegister } from '../../redux/Slices/RegisterSlice';
 
-
+import "./ValidatedInput.css"
+import { ExpandMoreRounded } from '@mui/icons-material';
 
 
 interface ValidatedDateSelectorProps{
@@ -29,7 +28,7 @@ export default function ValidatedDateSelector({style, valid, name, dropDown, dis
 
     function changeValue(e:React.ChangeEvent<HTMLSelectElement>):void {
 
-        setValue(parseInt(e.target.value)); 
+        setValue(+e.target.value); 
 
         console.log("Dispatch this change to a reducer");
         console.log("Value: ", e.target.value);
@@ -48,18 +47,27 @@ export default function ValidatedDateSelector({style, valid, name, dropDown, dis
 
         setColor(determineValidedSelectStyle(active, valid));
         
-    },[value, active, valid]);
+    },[active, valid, value]);
 
   return (
-    <div className={style}>
+    <div className="validated-input">
 
         <StyledInputBox active={active} valid={valid}>
 
             <StyledInputLabel color={color} active={active} valid={valid}>
                 {name}
+                
+                <ExpandMoreRounded sx={{
+                    fontSize: 34,
+                    color: active ? '#1DA1F2' : '#657786',
+                    position: 'absolute',
+                    right: '15px',
+                    top: '35%',
+                }}/>
+
             </StyledInputLabel>
 
-            <select onChange={changeValue} onFocus={toggleActive} onBlur={toggleActive} value={data}>
+            <select className='validated-input-value validated-date-selector' onChange={changeValue} onFocus={toggleActive} onBlur={toggleActive} value={data}>
 
              { dropDown()}
 
