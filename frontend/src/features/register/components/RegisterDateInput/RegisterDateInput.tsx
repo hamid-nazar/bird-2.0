@@ -31,16 +31,22 @@ export function RegisterDateInput({date}:RegisterDateInputProps):React.ReactElem
     useEffect(function(){
       
       let {month, day, year} = state.dob;
+   
 
       if (month && day && year) {
 
         setValid(validateDob({month, day, year}));
 
-      } 
+        console.log("Valid date : ", state.dobValid);
+       
+        dispatch(updateRegister({name: "dobValid", value: valid}));
 
-      dispatch(updateRegister({name: "dobValid", value: valid}));
+      } else {
+        
+        dispatch(updateRegister({name: "dobValid", value: false}));
+      }
 
-    },[state.dob.day, state.dob.month, state.dob.year, state.dobValid, valid])
+    },[state.dob.day, state.dob.month, state.dob.year, state.dobValid, valid]);
 
   return (
     <div className='register-date'>

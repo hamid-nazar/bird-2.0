@@ -69,6 +69,8 @@ public class UserService {
 		user.setLastName(ro.getLastName());
 		user.setEmail(ro.getEmail());
 		
+		System.out.print(ro.toString());
+		
 		String dateString = ro.getDob();
 		Date sqlDate = java.sql.Date.valueOf(dateString);
 		
@@ -118,6 +120,8 @@ public class UserService {
 		ApplicationUser user = userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
 		
 		user.setVerfication(generateVerificationNumber());
+		
+		System.out.println(user.getEmail());
 		
 		try {
 			mailService.sendEmail(user.getEmail(),"Your verification code", "Here is your verification code: "+ user.getVerfication());

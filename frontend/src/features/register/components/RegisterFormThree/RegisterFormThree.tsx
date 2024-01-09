@@ -20,13 +20,11 @@ export  function RegisterFormThree() {
         firstName: state.firstName,
         lastName: state.lastName,
         email: state.email,
-        dob: `${state.dob.month}-${state.dob.day}-${state.dob.year}`,
+        dob: `${state.dob.year}-${state.dob.month}-${state.dob.day}`,
       }
 
-      console.log("We are attempting to register: ", user);
+      dispatch(registerUser(user));
 
-      dispatch(registerUser(user))
-        
     }
 
   return (
@@ -41,11 +39,12 @@ export  function RegisterFormThree() {
 
             <div className='reg-step-three-value'>
                 <ValidatedDisplay label={"Email"} value={state.email}/>
-
-                {state.error? 
-                <p className='reg-step-three-error'> 
-                The email you specified is in use, please use a different one.
+                
+                {state.error === true? 
+                <p className='reg-step-three-error'>
+                   The email you specified is in use, please use a different one.
                 </p>: <></>}
+                
             </div>
 
             <div className='reg-step-three-value'>

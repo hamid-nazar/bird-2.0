@@ -33,7 +33,7 @@ export default function ValidatedDateSelector({style, valid, name, dropDown, dis
         console.log("Dispatch this change to a reducer");
         console.log("Value: ", e.target.value);
 
-       dispatcher(name.toLowerCase(), e.target.value);
+       dispatcher(name.toLowerCase(), +e.target.value);
     
     }
 

@@ -16,7 +16,7 @@ interface ValidatedTextInputProps {
 
 
 
-export default function ValidatedTextInput({valid, name, label, changeValue,data, attributes}:ValidatedTextInputProps):React.ReactElement {
+export default function ValidatedTextInput({valid, name, label, changeValue, data, attributes}:ValidatedTextInputProps):React.ReactElement {
 
     const [value, setValue] = useState<string>(data? data: "");
     const[borderActive, setBorderActive] = useState<boolean>(false);

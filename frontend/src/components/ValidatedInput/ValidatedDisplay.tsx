@@ -31,7 +31,7 @@ export function ValidatedDisplay({label,value, valid}:ValidatedDisplayProps):Rea
     <div className='validated-input'>
         <StyledInputBox active={false} valid={true}>
 
-            <StyledInputLabel color={focused ? 'blue' : 'gray'} active={!focused} valid={valid?(!valid? true : false) : true}>
+            <StyledInputLabel color={focused ? 'blue' : 'gray'} active={!focused} valid={valid ? (!valid ? true : false) : true}>
                 {label}
             </StyledInputLabel>
 

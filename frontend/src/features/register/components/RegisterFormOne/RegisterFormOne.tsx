@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import "./RegisterFormOne.css"
 import {RegisterDateInput} from '../RegisterDateInput/RegisterDateInput';
@@ -20,7 +20,7 @@ export function RegisterFormOne(): React.ReactElement {
 
  function nextPage() {
   
-    dispatch(updateRegister({    name:"error", value:"false"}));
+    dispatch(updateRegister({name:"error", value:"false"}));
 
    dispatch(incrementStep());
  }
@@ -31,7 +31,8 @@ export function RegisterFormOne(): React.ReactElement {
       registerState.emailValid &&
        registerState.firstNameValid && 
        registerState.lastNameValid) {
-      
+      console.log("Date state valid: ", registerState.dobValid);
+      console.log("Button abled: ", buttonActive);
       setButtonActive(true);
       
     } else {

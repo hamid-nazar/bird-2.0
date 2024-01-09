@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { StyledCheckbox, StyledCheckboxBackground } from './StyledChecknbox';
-import { CheckBoxRounded } from '@mui/icons-material';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 
 
 
@@ -18,7 +18,7 @@ export function Checkbox():React.ReactElement {
     <StyledCheckboxBackground active={clicked} onClick={toggleCheckbox}>
         <StyledCheckbox active={clicked} >
 
-            {clicked? <CheckBoxRounded sx={{
+            {clicked? <CheckRoundedIcon sx={{
                 fontSize: 18,
                 color: 'white',
             }}/> : <></>}
