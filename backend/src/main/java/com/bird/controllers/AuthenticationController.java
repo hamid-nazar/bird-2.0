@@ -5,6 +5,10 @@ import java.util.LinkedHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +22,9 @@ import com.bird.exceptions.EmailFailedToSendException;
 import com.bird.exceptions.IncorrectVerificationCodeException;
 import com.bird.exceptions.UserDoesNotExistException;
 import com.bird.models.ApplicationUser;
+import com.bird.models.LoginResponse;
 import com.bird.models.RegistrationObject;
+import com.bird.services.TokenService;
 import com.bird.services.UserService;
 
 @RestController
@@ -27,11 +33,15 @@ import com.bird.services.UserService;
 public class AuthenticationController {
 
 	private final UserService userService;
+	private final TokenService tokenService;
+	private final AuthenticationManager authenticationManager;
 
 	@Autowired
-	public AuthenticationController(UserService userService) {
+	public AuthenticationController(UserService userService, TokenService tokenService, AuthenticationManager authenticationManager) {
 
 		this.userService = userService;
+		this.tokenService = tokenService;
+		this.authenticationManager = authenticationManager;
 	}
 
 	@ExceptionHandler({ EmailAlreadyTakenException.class })
@@ -107,6 +117,30 @@ public class AuthenticationController {
 		String password = body.get("password");
 
 		return userService.setPassword(username, password);
+	}
+	
+	@PostMapping("/login")
+	public LoginResponse login(@RequestBody LinkedHashMap<String, String> body) {
+		
+		System.out.println(body.toString());
+		
+		String username = body.get("username");
+
+		String password = body.get("password");
+		
+		try {
+			
+			Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+			 
+			String token = tokenService.generateToken(auth);
+			
+			return new LoginResponse(userService.getUserbyUsername(username), token);
+			
+		} catch (AuthenticationException e) {
+			
+			return new LoginResponse(null, "");
+			
+		}
 	}
 
 }

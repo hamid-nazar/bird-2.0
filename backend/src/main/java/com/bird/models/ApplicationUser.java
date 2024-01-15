@@ -4,18 +4,20 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
@@ -47,6 +49,41 @@ public class ApplicationUser {
 	private String password;
 	
 	
+	private String bio;
+	
+	private String nickname;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "profile_picture", referencedColumnName = "image_id")
+	private Image profilePicture;
+	
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "banner_picture", referencedColumnName = "image_id")
+	private Image bannerPicture;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "following",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "following_id")
+			)
+	@JsonIgnore
+	private Set<ApplicationUser> following;
+	
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "followers",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "follower_id")
+			)
+	@JsonIgnore
+	private Set<ApplicationUser> followers;
+	
+	
+//	Security related stuff
+	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 		name = "user_role_junction",
@@ -70,7 +107,8 @@ public class ApplicationUser {
 	public ApplicationUser() {
 		
 		authorities = new HashSet<Role>();
-		
+		following = new HashSet<>();
+		followers = new HashSet<>();
 		this.enabled = false;
 	}
 
@@ -161,14 +199,63 @@ public class ApplicationUser {
 	public void setVerfication(Long verfication) {
 		this.verfication = verfication;
 	}
+	
+	public String getBio() {
+		return bio;
+	}
+
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public Image getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(Image profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+
+	public Image getBannerPicture() {
+		return bannerPicture;
+	}
+
+	public void setBannerPicture(Image bannerPicture) {
+		this.bannerPicture = bannerPicture;
+	}
+
+	public Set<ApplicationUser> getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(Set<ApplicationUser> following) {
+		this.following = following;
+	}
+
+	public Set<ApplicationUser> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(Set<ApplicationUser> followers) {
+		this.followers = followers;
+	}
 
 	@Override
 	public String toString() {
 		return "ApplicationUser [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email="
 				+ email + ", phone=" + phone + ", dateOfBirth=" + dateOfBirth + ", username=" + username + ", password="
-				+ password + ", authorities=" + authorities + ", enabled=" + enabled + ", verfication=" + verfication
-				+ "]";
+				+ password + ", bio=" + bio + ", nickname=" + nickname + ", profilePicture=" + profilePicture
+				+ ", bannerPicture=" + bannerPicture + ", following=" + following.size() + ", followers=" + followers.size()
+				+ ", authorities=" + authorities + ", enabled=" + enabled + ", verfication=" + verfication + "]";
 	}
 	
-	
+
 }

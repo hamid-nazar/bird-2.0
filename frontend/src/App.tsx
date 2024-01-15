@@ -5,6 +5,8 @@ import { ThemeProvider, createGlobalStyle } from 'styled-components';
 
 import { Landing } from './pages/Landing';
 import { Theme } from './utils/GlobalInterfaces';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Feed } from './pages/Feed';
 
 
 const theme:Theme = {
@@ -31,7 +33,12 @@ const GlobalStyle = createGlobalStyle`
 export function App() {
   return (
      <ThemeProvider theme={theme}>
-    <Landing></Landing>
+      <BrowserRouter>
+      <Routes>
+        <Route path ="/"  element={<Landing />}/>
+        <Route path ="/home" element={<Feed />}/>
+      </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   )
 }

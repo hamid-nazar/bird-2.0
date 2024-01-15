@@ -2,8 +2,15 @@ package com.bird.services;
 
 import java.sql.Date;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +25,7 @@ import com.bird.repositories.RoleRepository;
 import com.bird.repositories.UserRepository;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 	
 	private final UserRepository userRepo;
 	private final RoleRepository roleRepo;
@@ -186,6 +193,25 @@ public class UserService {
 		long generatedNumber = (long)Math.floor(Math.random()*1_00_000_000);
 		
 		return generatedNumber;
+	}
+
+
+
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		ApplicationUser u = userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+		
+		Set<GrantedAuthority> authorities = u.getAuthorities()
+				.stream()
+				.map(role -> new SimpleGrantedAuthority(role.getAuthority()))
+				.collect(Collectors.toSet());
+		
+		UserDetails ud = new User(u.getUsername(), u.getPassword(), authorities);
+		
+		
+		return ud;
 	}
 
 

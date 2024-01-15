@@ -8,6 +8,7 @@ import "./RegisterFormSix.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../../redux/Store';
 import { updateUserPassword } from '../../../../redux/Slices/RegisterSlice';
+import { useNavigate } from 'react-router-dom';
 
 export function RegisterFormSix(): React.ReactElement {
 
@@ -16,6 +17,8 @@ export function RegisterFormSix(): React.ReactElement {
 
     const[active, setActive] = useState<boolean>(false);
     const[password, setPassword] = useState<string>("");
+
+    const navigate = useNavigate();
 
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>):void {
@@ -28,9 +31,11 @@ export function RegisterFormSix(): React.ReactElement {
         setActive(!active);
     }
 
-    function sendPassword():void {
+    async function sendPassword():Promise<void> {
 
-        dispatch(updateUserPassword({username: state.username, password}));
+        await dispatch(updateUserPassword({username: state.username, password}));
+
+        navigate("/home");
     }
 
   return (
