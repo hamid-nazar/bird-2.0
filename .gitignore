@@ -6,3 +6,4 @@ backend/.metadata
 **/resources/certs
 **/.metadata
 **/tokens
+**/application.properties
