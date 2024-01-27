@@ -17,6 +17,10 @@ interface RegisterSliceState {
     step: number;
     username: string;
     phoneNumber: string;
+    phoneNumberValid: boolean;
+    code: string;
+    password: string;
+    login: boolean;
 }
 
 interface UpdatePayload {
@@ -65,7 +69,11 @@ const initialState:RegisterSliceState = {
     dobValid: false,
     step: 1,
     username: '',
-    phoneNumber: ''
+    phoneNumber: '',
+    phoneNumberValid: false,
+    code: '',
+    password: "",
+    login: false
 }
 
 
@@ -155,9 +163,9 @@ export const RegisterSlice =  createSlice({
 
     reducers: {
         updateRegister: (state, action: PayloadAction<UpdatePayload>) => {
-
+    
             const {name, value} = action.payload
-            
+      
             if (name === "month" || name === "day" || name === "year") {
                 let dob = state.dob;  
 
@@ -177,13 +185,12 @@ export const RegisterSlice =  createSlice({
                 }
              }
              
-             console.log("Updating the global register state: ", state)
-             
              return state;
         },
 
         incrementStep(state){
             state.step = state.step + 1;
+            state.error = false;
             return state;
         },
         decremetnStep(state){
@@ -194,6 +201,13 @@ export const RegisterSlice =  createSlice({
                 state.step = state.step - 1;
                 return state;
             }
+        },
+
+        cleanRegisterState(state){
+
+            state = initialState;
+
+            return state;
         }
 
     },
@@ -320,7 +334,8 @@ export const RegisterSlice =  createSlice({
             state = {
                 ...state,
                 loading: false,
-                error: false
+                error: false,
+                login: true
             }
 
             return state;
@@ -388,5 +403,5 @@ export const RegisterSlice =  createSlice({
 });
 
 
-export const {updateRegister, incrementStep, decremetnStep} = RegisterSlice.actions;
+export const {updateRegister, incrementStep, cleanRegisterState, decremetnStep} = RegisterSlice.actions;
 export default RegisterSlice.reducer;

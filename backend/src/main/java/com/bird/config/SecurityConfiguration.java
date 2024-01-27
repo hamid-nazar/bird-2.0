@@ -61,6 +61,8 @@ public class SecurityConfiguration {
 				.authorizeRequests(auth -> auth
 						.mvcMatchers("/auth/**").permitAll()
 						.mvcMatchers("/images/**").permitAll()
+						.mvcMatchers("/user/followers/**").permitAll()
+						.mvcMatchers("/user/following/**").permitAll()
 						.anyRequest().authenticated()
 				)
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)

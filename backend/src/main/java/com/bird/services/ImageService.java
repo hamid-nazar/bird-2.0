@@ -32,7 +32,7 @@ public class ImageService {
 
 	}
 	
-	public String uploadImage(MultipartFile file, String prefix) throws UnableToSavePhotoException {
+	public Image uploadImage(MultipartFile file, String prefix) throws UnableToSavePhotoException {
 		
 		try {
 			String extension = "." + file.getContentType().split("/")[1];
@@ -47,7 +47,7 @@ public class ImageService {
 			
 			Image saved = imageRepository.save(i);
 			
-			return "file uploaded succefully: " + img.getName();
+			return saved;
 			
 		} catch (IOException e) {
 			

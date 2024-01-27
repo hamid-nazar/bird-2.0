@@ -1,5 +1,9 @@
 package com.bird.services;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,12 +17,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bird.exceptions.EmailAlreadyTakenException;
 import com.bird.exceptions.EmailFailedToSendException;
+import com.bird.exceptions.FollowException;
 import com.bird.exceptions.IncorrectVerificationCodeException;
+import com.bird.exceptions.UnableToSavePhotoException;
 import com.bird.exceptions.UserDoesNotExistException;
 import com.bird.models.ApplicationUser;
+import com.bird.models.Image;
 import com.bird.models.RegistrationObject;
 import com.bird.models.Role;
 import com.bird.repositories.RoleRepository;
@@ -31,15 +39,17 @@ public class UserService implements UserDetailsService {
 	private final RoleRepository roleRepo;
 	private MailService mailService;
 	private final PasswordEncoder passwordEncoder;
+	private final ImageService imageService;
 	
 
 	@Autowired
-	public UserService(UserRepository userRepo, RoleRepository roleRepo, MailService mailService, PasswordEncoder passwordEncoder) {
+	public UserService(UserRepository userRepo, RoleRepository roleRepo, MailService mailService, PasswordEncoder passwordEncoder, ImageService imageService) {
 		
 		this.userRepo = userRepo;
 		this.roleRepo = roleRepo;
 		this.mailService = mailService;
 		this.passwordEncoder = passwordEncoder;
+		this.imageService = imageService;
 	}
 	
 	
@@ -216,31 +226,95 @@ public class UserService implements UserDetailsService {
 
 
 
+  public ApplicationUser setBannerOrProfilePicture(String username, MultipartFile file, String prefix) throws UnableToSavePhotoException {
+	
+		ApplicationUser user = userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+
+		Image photo = imageService.uploadImage(file, prefix);
+
+		try {
+			if (prefix.equals("pfp")) {
+				
+				if (user.getProfilePicture() != null && !user.getProfilePicture().getImageName().equals("defaultpfp.png")) {
+					
+					 Path path = Paths.get(user.getProfilePicture().getImagePath());
+					 Files.deleteIfExists(path);
+				}
+				
+				user.setProfilePicture(photo);
+				
+			} else {
+				
+				if (user.getBannerPicture() != null && !user.getBannerPicture().getImageName().equals("defaultbnr.png")) {
+					
+					 Path path = Paths.get(user.getBannerPicture().getImagePath());
+					 Files.deleteIfExists(path);
+				}
+				
+				user.setBannerPicture(photo);
+			}
+
+		} catch (IOException e) {
+			
+			throw new UnableToSavePhotoException();
+		}
+
+		return userRepo.save(user);
+  }
+
+
+  public Set<ApplicationUser> followerUser(String userName, String followeeName) throws FollowException {
+	  
+		if (userName.equals(followeeName)) {
+
+			throw new FollowException();
+		}
+	  
+	  ApplicationUser loggedInUser = userRepo.findByUsername(userName).orElseThrow(UserDoesNotExistException::new);
+	  
+	  Set<ApplicationUser> followingList = loggedInUser.getFollowing();
+	  
+	  ApplicationUser followedUser = userRepo.findByUsername(followeeName).orElseThrow(UserDoesNotExistException::new);
+	  
+	  Set<ApplicationUser> followersList = followedUser.getFollowers();
+	  
+     //Add the followed user to the following list
+	  followingList.add(followedUser);
+	  loggedInUser.setFollowing(followingList);
+	  
+	  
+	  //Add the current user to the follower list of the followee
+	  followersList.add(loggedInUser);
+	  followedUser.setFollowers(followersList);
+	  
+//	  Update both users 
+	  userRepo.save(loggedInUser);
+	  userRepo.save(followedUser);
+	  
+	  
+	  return loggedInUser.getFollowing();
+  }
 
 
 
 
+public Set<ApplicationUser> retrieveFollowingList(String username) {
+	
+	ApplicationUser user = userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+	
+ 	return user.getFollowing();
+}
 
 
 
 
+public Set<ApplicationUser> retrieveFollowersList(String username) {
+	
+	ApplicationUser user = userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+	
+ 	return user.getFollowers();
+}
 
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

@@ -1,34 +1,53 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import {Modal} from '../../../../components/Modal/Modal'
 import "./RegisterModal.css"
 import {RegisterationStepCounter} from '../RegisterStepCounter/RegisterationStepCounter'
 import { determineModalContent } from '../../utils/RegisterModalUtils'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../../../redux/Store'
-import { decremetnStep } from '../../../../redux/Slices/RegisterSlice'
+import { cleanRegisterState, decremetnStep } from '../../../../redux/Slices/RegisterSlice'
+import { RegisterNextButton } from '../RegisterNextButton/RegisterNextButton'
 
-export function RegisterModal():React.ReactElement {
+
+interface RegisterModalProps {
+  toggleModal(): void;
+}
+
+
+export function RegisterModal({toggleModal}:RegisterModalProps):React.ReactElement {
 
   const state = useSelector((state:RootState) => state.register);
 
   const dispatch:AppDispatch = useDispatch();
 
 
-function stepButtonClicked() {
-  dispatch(decremetnStep());
-}
+  function stepButtonClicked() {
+    
+    if (state.step === 1) {
+
+      toggleModal();
+
+      return;
+    }
+    dispatch(decremetnStep());
+  }
+
+  useEffect(function(){
+    
+    return function(){
+
+      dispatch(cleanRegisterState());
+      
+    }
+  },[])
+
 
   return (
-      
-      <Modal>
-       <div className='register-modal'>
-        <RegisterationStepCounter step={state.step} changeStep={stepButtonClicked}/>
-        <div className='register-modal-content'>
-        {determineModalContent(state.step)}
-        </div>
-     
-       </div>
-      </Modal>
-      
-  )
+  
+        <Modal 
+          topContent={<RegisterationStepCounter step={state.step} changeStep={stepButtonClicked}/>} 
+          content={determineModalContent(state.step)} 
+          bottomContent={<RegisterNextButton step={state.step}/>}/>
+
+  )       
 }

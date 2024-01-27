@@ -33,8 +33,7 @@ export default function ValidatedTextInput({valid, name, label, changeValue, dat
 
     function update(e:React.ChangeEvent<HTMLInputElement>):void {
         setValue(e.target.value);
-        console.log("Value: ", e.target.value);
-
+       
         changeValue(e);
     }
 

@@ -4,12 +4,12 @@ import { DropDown } from '../../../../components/DropDown/DropDown'
 import ValidatedTextInput from '../../../../components/ValidatedInput/ValidatedTextInput'
 import { countryCodeDropDown } from '../../utils/RegisterModalUtils'
 import { validatePhone } from '../../../../services/validators'
-import { StyledNextButton } from '../RegisterNextButton/RegisterNextButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../../../redux/Store'
-import { updateRegister, updateUserPhone } from '../../../../redux/Slices/RegisterSlice'
+import { updateRegister } from '../../../../redux/Slices/RegisterSlice'
 
-import "./RegisterFormFour.css"
+import "./RegisterForm.css"
+import '../../../../assets/global.css'
 
 
 
@@ -34,36 +34,33 @@ export function RegisterFormFour(): React.ReactElement {
 
         setPhoneNumber(e.target.value);
 
-        updateRegister({name: "phoneNumberValid", value: e.target.value});
+        dispatch(updateRegister({name: e.target.name, value:phoneCode + e.target.value}));
+        
     }
 
-    function sendPhoneNumber():void {
-        
-        dispatch(updateUserPhone({username: state.username, phone: `${phoneCode}${phoneNumber}`}));
-    }
 
     useEffect(function(){
         
         if (phoneNumber) {
-
             setValidNumber(validatePhone(phoneNumber));
+            dispatch(updateRegister({name: "phoneNumberValid", value: validatePhone(phoneNumber)}));
         } 
 
     },[phoneCode, phoneNumber]);
 
 
   return (
-    <div className='reg-step-four-container'>
+    <div className='register-container'>
 
-        <div className='reg-step-four-content'>
+        <div className='register-content'>
             
-            <h1>Add a phone number</h1>
-            <p className='reg-step-four-subhead'>
+            <h1 className='register-header-2'>Add a phone number</h1>
+            <p className='register-text color-gray'>
                 Enter a phone number you would like to associate with Fwitter your account.
                 You won't get a verification code sendt here.
             </p>
 
-            <div className='reg-step-four-input'>
+            <div className={validNumber ? 'register-four-input-wrapper' : 'register-four-input-wrapper-condensed'}>
                 <DropDown 
                 content={countryCodeDropDown} 
                 change={changeCode} 
@@ -78,20 +75,23 @@ export function RegisterFormFour(): React.ReactElement {
                 changeValue={changePhoneNumber}
                 />
                 
-                {validNumber ? <></> : <p className='reg-step-four-invalid'>Please enter a valid 10 digit number.</p>}
+                {validNumber ? <></> : <p className='register-error color-red'>Please enter a valid 10 digit number.</p>}
 
             </div>
 
-            <div className='reg-step-four-check-group'>
-                <p>Let People who have your phone number find and connect with on Fwitter.
-                    <span className='reg-step-four-link'> Learn more</span>.
+            <div className='register-four-checkbox-wrapper'>
+
+                <p className='register-text color-gray'>
+                    Let people who have your phone number find and connect with you on Fwitter.
+                    <span className='register-link color-blue'> Learn more</span>.
                 </p>
                 <Checkbox/>
+
             </div>
 
-            <div className="reg-step-four-check-group">
+            <div className="register-four-checkbox-wrapper">
 
-                    <p>
+                    <p className='register-text color-gray'>
 
                         Let Fwitter use your phone number to personalize our services, 
                         including ads (if permitted by your Ads preferences). 
@@ -107,12 +107,6 @@ export function RegisterFormFour(): React.ReactElement {
 
         </div>
 
-        <StyledNextButton disabled={(phoneNumber && validNumber)? false : true} 
-            color={'black'} active={(phoneNumber && validNumber)? true : false}
-            onClick={sendPhoneNumber}>
-                Update Number
-        </StyledNextButton>
-        
     </div>
   )
 }

@@ -11,7 +11,7 @@ interface RegisterStepProps {
 export function RegisterationStepCounter({step, changeStep}:RegisterStepProps): React.ReactElement {
   return (
     <div className='reg-step-counter-container'>
-        <div className={iconClass(step)}onClick={changeStep}>
+        <div className={iconClass(step)} onClick={changeStep}>
         {displayIcon(step)}
         </div>
         <span className='reg-step-number'>Step {step} of 6 </span>

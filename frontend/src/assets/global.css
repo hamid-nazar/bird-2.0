@@ -49,3 +49,11 @@ html,body,#root{
 .link:hover {
     text-decoration: underline;
 }
+
+.link.color-blue {
+    cursor: pointer;
+}
+
+.link:hover.color-blue {
+    text-decoration: underline;
+}
