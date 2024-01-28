@@ -38,7 +38,7 @@ export const loginUser = createAsyncThunk("user/login", async function(body: Log
         
     } catch (error) {
         
-        thunkAPI.rejectWithValue(error);
+       return thunkAPI.rejectWithValue(error);
     }
 });
 
@@ -69,6 +69,16 @@ export const UserSlice = createSlice({
             }
 
             return state;
+        },
+
+        resetUsername(state, action: PayloadAction<void>) {
+            
+            state ={
+                ...state,
+                username: ""
+            };
+
+            return state;
         }
     },
 
@@ -76,6 +86,12 @@ export const UserSlice = createSlice({
 
         builder.addCase(loginUser.pending, (state, action) => {
 
+            state = {
+                ...state,
+                error: false
+            };
+
+            return state;
          });
 
         builder.addCase(verifyUsername.pending, (state, action) => {
@@ -121,7 +137,13 @@ export const UserSlice = createSlice({
 
 
         builder.addCase(loginUser.rejected, (state, action) => {
-            
+
+            state = {
+                ...state,
+                error: true
+            };
+
+            return state;
         });
 
         builder.addCase(verifyUsername.rejected, (state, action) => {
@@ -143,6 +165,6 @@ export const UserSlice = createSlice({
 
 
 
-export const {setFromRegister} = UserSlice.actions;
+export const {setFromRegister,resetUsername} = UserSlice.actions;
 
 export default UserSlice.reducer

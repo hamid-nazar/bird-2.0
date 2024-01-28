@@ -55,6 +55,8 @@ export function LoginFormOne(): React.ReactElement {
         <h1 className='login-form-header'> Sign in to Fwitter </h1>
 
         <ModalButton 
+            active={true}
+            height={40}
             fontColor={'#536471'}
             borderColor={'#536471'}
             backgroundColor={'white'}
@@ -67,6 +69,8 @@ export function LoginFormOne(): React.ReactElement {
         </ModalButton>
         
         <ModalButton 
+            active={true}
+            height={40}
             fontColor={'black'}
             borderColor={'#536471'}
             backgroundColor={'white'}
@@ -99,6 +103,8 @@ export function LoginFormOne(): React.ReactElement {
         {state.error? <p className='login-form-error color-red'> Unable to find user </p>: <></>}
 
         <ModalButton
+            active={true}
+            height={40}
             fontColor={'white'}
             backgroundColor={'black'} 
             fontSize={16}
@@ -109,6 +115,8 @@ export function LoginFormOne(): React.ReactElement {
         </ModalButton>
 
         <ModalButton
+            active={true}
+            height={40}
             fontColor={'black'}
             borderColor={'#d3d3d3'}
             backgroundColor={'white'} 

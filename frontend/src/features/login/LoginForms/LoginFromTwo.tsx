@@ -42,7 +42,7 @@ export function LoginFromTwo({setPassword}:LoginFromTwoProps): React.ReactElemen
             <div className='login-form-two-password'>
 
                 <ValidatedTextInput
-                    valid={true}
+                    valid={!state.error}
                     label={"Password"}
                     name={"password"}
                     changeValue={setPassword}
@@ -54,6 +54,8 @@ export function LoginFromTwo({setPassword}:LoginFromTwoProps): React.ReactElemen
                     {active ? <VisibilityOff sx={{fontSize: "24px"}} /> : <VisibilityOffOutlined sx={{fontSize: "24px"}}/>}
 
                 </div>
+
+                {state.error? <p className='login-form-error color-red'> Password is incorrect </p> : <></>}
 
                 <p className='login-form-forgot color-blue'> Forgot Password? </p>
 

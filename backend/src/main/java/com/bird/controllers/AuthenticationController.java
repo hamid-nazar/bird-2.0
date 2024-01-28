@@ -2,6 +2,7 @@ package com.bird.controllers;
 
 import java.util.LinkedHashMap;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import com.bird.dto.FindUsernameDTO;
 import com.bird.exceptions.EmailAlreadyTakenException;
 import com.bird.exceptions.EmailFailedToSendException;
 import com.bird.exceptions.IncorrectVerificationCodeException;
+import com.bird.exceptions.InvalidCredentialsException;
 import com.bird.exceptions.UserDoesNotExistException;
 import com.bird.models.ApplicationUser;
 import com.bird.models.LoginResponse;
@@ -122,8 +124,14 @@ public class AuthenticationController {
 		return userService.setPassword(username, password);
 	}
 	
+	@ExceptionHandler(InvalidCredentialsException.class)
+	public ResponseEntity<String> handleInvalidCredentials(){
+		
+		return new ResponseEntity<String>("Invalid credentials", HttpStatus.FORBIDDEN);
+	}
+	
 	@PostMapping("/login")
-	public LoginResponse login(@RequestBody LinkedHashMap<String, String> body) {
+	public LoginResponse login(@RequestBody LinkedHashMap<String, String> body) throws InvalidCredentialsException{
 		
 		System.out.println(body.toString());
 		
@@ -141,7 +149,7 @@ public class AuthenticationController {
 			
 		} catch (AuthenticationException e) {
 			
-			return new LoginResponse(null, "");
+			throw new InvalidCredentialsException();
 			
 		}
 	}
