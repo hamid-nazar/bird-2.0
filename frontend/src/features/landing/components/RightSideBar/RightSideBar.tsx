@@ -22,7 +22,7 @@ export function RightSideBar({toggleRegister, toggleLogin}: RightSideBarProps) {
 
   return (
     <div className='right-side-bar'>
-         <img src={logoBlue} className='right-side-bar-logo' />
+         <img src={logoBlue} className='right-side-bar-logo' alt='Fwitter' />
 
          <h1 className='right-side-bar-h1'> Hapening now </h1>
          <h2 className='right-side-bar-h2'> Join Fwitter today. </h2>
@@ -53,7 +53,7 @@ export function RightSideBar({toggleRegister, toggleLogin}: RightSideBarProps) {
          <div className='right-side-bar-login-wrapper'>
 
             <h3 className='right-side-bar-h3'> Already have an account?</h3>
-            <SignInButton handleClici={toggleLogin}/>
+            <SignInButton handleClick={toggleLogin}/>
 
          </div>
 

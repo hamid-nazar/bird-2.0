@@ -6,13 +6,13 @@ import './Buttons.css';
 
 
 interface SignInButtonProps {
-  handleClici():void;
+  handleClick():void;
 }
 
-export function SignInButton({handleClici}:SignInButtonProps): React.ReactElement {
+export function SignInButton({handleClick}:SignInButtonProps): React.ReactElement {
 
   return (
-    <div className='landing-button sign-in' onClick={handleClici}>
+    <div className='landing-button sign-in' onClick={handleClick}>
         <p className='sign-in-text color-blue'> Sign in </p>
     </div>
   )

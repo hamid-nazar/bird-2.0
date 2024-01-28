@@ -3,7 +3,9 @@ package com.bird.controllers;
 import java.util.LinkedHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bird.dto.FindUsernameDTO;
 import com.bird.exceptions.EmailAlreadyTakenException;
 import com.bird.exceptions.EmailFailedToSendException;
 import com.bird.exceptions.IncorrectVerificationCodeException;
@@ -141,6 +144,18 @@ public class AuthenticationController {
 			return new LoginResponse(null, "");
 			
 		}
+	}
+	
+	@PostMapping("/find")
+	public ResponseEntity<String> verifyUsername(@RequestBody FindUsernameDTO credentail){
+		
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setContentType(MediaType.TEXT_PLAIN);
+		
+		String username = userService.verifyUsername(credentail);
+		
+		return new ResponseEntity<String>(username,HttpStatus.OK);
+		
 	}
 
 }

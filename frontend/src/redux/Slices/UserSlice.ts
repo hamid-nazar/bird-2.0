@@ -5,6 +5,7 @@ import axios from "axios";
 
 interface UserSliceState {
     loggedIn: User | undefined;
+    username: string;
     fromRegister: boolean;
     error: boolean;
 }
@@ -14,8 +15,15 @@ interface LoginBody{
     password: string;
 }
 
+interface VerifyUserBody {
+    email: string;
+    phone: string;
+    username: string;
+}
+
 const initialState: UserSliceState = {
     loggedIn: undefined,
+    username:"",
     fromRegister: false,
     error: false,
 };
@@ -32,6 +40,20 @@ export const loginUser = createAsyncThunk("user/login", async function(body: Log
         
         thunkAPI.rejectWithValue(error);
     }
+});
+
+export const verifyUsername = createAsyncThunk("user/username", async function(body: VerifyUserBody, thunkAPI){
+
+    try{
+
+        const req = await axios.post('http://localhost:8000/auth/find', body);
+        return req.data;
+
+    } catch(error){
+
+       return thunkAPI.rejectWithValue(error);
+    }
+    
 })
 
 export const UserSlice = createSlice({
@@ -54,7 +76,16 @@ export const UserSlice = createSlice({
 
         builder.addCase(loginUser.pending, (state, action) => {
 
-    });
+         });
+
+        builder.addCase(verifyUsername.pending, (state, action) => {
+            
+            state = {
+                ...state,
+                error: false
+            };
+            return state;
+        });
 
         builder.addCase(loginUser.fulfilled, (state, action) => {
         
@@ -76,11 +107,32 @@ export const UserSlice = createSlice({
             }
 
             return state;
-    });
+         });
+
+         builder.addCase(verifyUsername.fulfilled, (state, action) => {
+
+            state = {
+                ...state,
+                username: action.payload
+            };
+            
+            return state;
+        });
+
 
         builder.addCase(loginUser.rejected, (state, action) => {
-        
-    });
+            
+        });
+
+        builder.addCase(verifyUsername.rejected, (state, action) => {
+
+            state = {
+                ...state,
+                error: true
+            };
+
+            return state;
+        });
 
 }
 

@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bird.dto.FindUsernameDTO;
 import com.bird.exceptions.EmailAlreadyTakenException;
 import com.bird.exceptions.EmailFailedToSendException;
 import com.bird.exceptions.FollowException;
@@ -298,23 +299,30 @@ public class UserService implements UserDetailsService {
 
 
 
-public Set<ApplicationUser> retrieveFollowingList(String username) {
+	public Set<ApplicationUser> retrieveFollowingList(String username) {
+
+		ApplicationUser user = userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+
+		return user.getFollowing();
+	}
+
+	public Set<ApplicationUser> retrieveFollowersList(String username) {
+
+		ApplicationUser user = userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+
+		return user.getFollowers();
+	}
+
 	
-	ApplicationUser user = userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
-	
- 	return user.getFollowing();
-}
-
-
-
-
-public Set<ApplicationUser> retrieveFollowersList(String username) {
-	
-	ApplicationUser user = userRepo.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
-	
- 	return user.getFollowers();
-}
-
+	public String verifyUsername(FindUsernameDTO credential) {
+		
+		ApplicationUser user = userRepo
+				.findByEmailOrPhoneOrUsername(credential.getEmail(), credential.getPhone(), credential.getUsername())
+				.orElseThrow(UserDoesNotExistException::new);
+		
+		
+		return user.getUsername();
+	}
 
 	
 }
