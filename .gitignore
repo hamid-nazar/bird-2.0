@@ -3,7 +3,8 @@ fontend/src/config.ts
 backend/.metadata
 **/resources/*.json
 **/StoredCredential
-**/resources/certs/*.pem
+**/resources/certs
 **/.metadata
-**/tokens
 **/application.properties
+**/templates
+**/tokens
