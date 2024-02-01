@@ -1,7 +1,7 @@
 frontend/node_modules
 fontend/src/config.ts
 backend/.metadata
-**/resources/*
+**/resources/**
 **/resources/*.json
 **/StoredCredential
 **/resources/certs
