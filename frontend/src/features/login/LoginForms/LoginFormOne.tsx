@@ -15,9 +15,13 @@ import '../../../assets/global.css';
 import './LoginForms.css';
 
 
+interface LoginFormOneProps{
+    noAccount():void
+}
 
 
-export function LoginFormOne(): React.ReactElement {
+
+export function LoginFormOne({noAccount}:LoginFormOneProps): React.ReactElement {
 
     const state = useSelector((state:RootState) => state.user);
     const dispatch:AppDispatch = useDispatch();
@@ -128,7 +132,7 @@ export function LoginFormOne(): React.ReactElement {
             Forgot password?
         </ModalButton>
 
-        <p className='login-form-text color-gray'> Don't have an account? <span className='link color-blue'>Sign up</span></p>
+        <p className='login-form-text color-gray'> Don't have an account? <span className='link color-blue' onClick={noAccount}>Sign up</span></p>
     </div>
   )
 }

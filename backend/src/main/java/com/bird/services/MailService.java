@@ -25,7 +25,7 @@ public class MailService {
 		this.gmail = gmail;
 	}
 
-	public void sendEmail(String toAddress, String subject, String content) throws Exception {
+	public void sendEmail(String toAddress, String subject, String content) throws EmailFailedToSendException {
 
 		Properties props = new Properties();
 

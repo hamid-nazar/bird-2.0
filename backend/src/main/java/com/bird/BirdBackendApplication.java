@@ -39,7 +39,7 @@ public class BirdBackendApplication {
 			u.setAuthorities(roles);
 			u.setFirstName("unknown");
 			u.setLastName("koder");
-			u.setEmail("wasej69587@kkoup.com");
+			u.setEmail("ginom23365@seosnaps.com");
 			u.setUsername("unknownkoder");
 			u.setPhone("5555555555");
 			u.setPassword(encoder.encode("password"));

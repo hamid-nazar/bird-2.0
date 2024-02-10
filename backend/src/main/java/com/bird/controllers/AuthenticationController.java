@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bird.dto.FindUsernameDTO;
+import com.bird.dto.PasswordCodeDTO;
 import com.bird.exceptions.EmailAlreadyTakenException;
 import com.bird.exceptions.EmailFailedToSendException;
 import com.bird.exceptions.IncorrectVerificationCodeException;
@@ -29,6 +30,7 @@ import com.bird.exceptions.UserDoesNotExistException;
 import com.bird.models.ApplicationUser;
 import com.bird.models.LoginResponse;
 import com.bird.models.RegistrationObject;
+import com.bird.services.MailService;
 import com.bird.services.TokenService;
 import com.bird.services.UserService;
 
@@ -40,13 +42,15 @@ public class AuthenticationController {
 	private final UserService userService;
 	private final TokenService tokenService;
 	private final AuthenticationManager authenticationManager;
+	private final MailService mailService;
 
 	@Autowired
-	public AuthenticationController(UserService userService, TokenService tokenService, AuthenticationManager authenticationManager) {
+	public AuthenticationController(UserService userService, TokenService tokenService, AuthenticationManager authenticationManager, MailService mailService) {
 
 		this.userService = userService;
 		this.tokenService = tokenService;
 		this.authenticationManager = authenticationManager;
+		this.mailService = mailService;
 	}
 
 	@ExceptionHandler({ EmailAlreadyTakenException.class })
@@ -165,5 +169,65 @@ public class AuthenticationController {
 		return new ResponseEntity<String>(username,HttpStatus.OK);
 		
 	}
+	
+	@PostMapping("/identifiers")
+	public FindUsernameDTO findIdentifiers(@RequestBody FindUsernameDTO credential) {
+		
+		ApplicationUser user = userService.getUsersEmailAndPhone(credential);
+		
+		return new FindUsernameDTO(user.getEmail(), user.getPhone(), user.getUsername());		
+	}
+	
+	@PostMapping("/password/code")
+	public ResponseEntity<String> retrievePasswordCode(@RequestBody PasswordCodeDTO body) throws EmailFailedToSendException{
+		
+		String email = body.getEmail();
+		int code = body.getCode();
+		
+		mailService.sendEmail(email, "Your password reset code", ""+code);
+		
+		
+		return new ResponseEntity<String>("Code sendt successfully",HttpStatus.OK);
+	}
+	
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

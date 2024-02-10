@@ -11,6 +11,7 @@ import LogingModal from '../features/login';
 import { AppDispatch } from '../redux/Store';
 import { useDispatch } from 'react-redux';
 import { resetUsername } from '../redux/Slices/UserSlice';
+import ForgotPasswordModal from '../features/forgotpassword';
 
 
 
@@ -21,6 +22,7 @@ export function Landing():React.ReactElement {
   
   const [register, setRegister] = useState<boolean>(false);
   const [login, setLogin] = useState<boolean>(false);
+  const[fogotPassword, setForgotPassword] = useState<boolean>(true);
 
   function toggleRegister():void {
     setRegister(!register);
@@ -33,12 +35,19 @@ export function Landing():React.ReactElement {
     dispatch(resetUsername());
   }
 
+  function toggleForgotPassword():void {
+
+    setForgotPassword(!fogotPassword);
+  }
+
   return (
     <div className='home-container bg-color'>
 
       {register ? <RegisterModal toggleModal={toggleRegister}/> : <></> }
 
-      {login ? <LogingModal toggleModal={toggleLogin}/> : <></>}
+      {login ? <LogingModal toggleModal={toggleLogin} toggleRegister={toggleRegister}/> : <></>}
+
+     { fogotPassword? <ForgotPasswordModal toggleModal={toggleForgotPassword}/>: <></>}
 
         <div className='landing-layout'>
 
