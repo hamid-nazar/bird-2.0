@@ -1,12 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal } from '../../../../components/Modal/Modal';
 import { ForgotModalTop } from '../ForgotModalTop/ForgotModalTop';
-import { ForgotFormOne } from '../ForgotForms/ForgotFormOne';
 import { validateEmail, validatePhone } from '../../../../services/validators';
 import axios from 'axios';
-import { ForgotButtonOne } from '../ForgotButtonOne/ForgotButtonOne';
-import { ForgotFormTwo } from '../ForgotForms/ForgotFormTwo';
-import { ForgotButtonTwo } from '../ForgotButtonTwo/ForgotButtonTwo';
+import { determineForgotButton, determineForgotFormContent } from '../../utils/ForgotPasswordUtils';
 
 
 
@@ -34,11 +31,32 @@ export function ForgotPasswordModal({toggleModal}:ForgotPasswordModalProps):Reac
     const[error, setError] = useState<boolean>(false);
     const[step, setStep] = useState<number>(1);
     const[resetCode, setResetCode] = useState<number>(0);
+    const[userInputCode, setUserInputCode] = useState<number>(0);
+    const[password, setPassword] = useState<Record<string, string>>({
+        password: "",
+        confirmPassword: ""
+    });
+    const[matching, setMatching] = useState<boolean>(true);
 
-    function changeCredential(credential: string):void {
+
+
+    function changeCredential(credential: string): void {
 
         setCredential(credential);
     }
+
+    function changeUserInputCode(value: number):void {
+
+        setUserInputCode(value);
+     }
+
+     function updatePassword(e: React.ChangeEvent<HTMLInputElement>): void {
+
+        setPassword({
+            ...password,
+            [e.target.name]: e.target.value
+        })
+     }
 
     async function searchUser():Promise<void> {
 
@@ -106,11 +124,74 @@ export function ForgotPasswordModal({toggleModal}:ForgotPasswordModalProps):Reac
         }
     }
 
+    function checkCode(): void {
+
+        if (userInputCode === resetCode) {
+
+            setStep(4);
+
+        } else{
+
+            setError(true);
+        }
+    }
+
+
+    const sendPassword = async () => {
+        let body = {
+            username: userInfo.username,
+            password: password.password
+        }
+
+        try{
+            let req = await axios.put("http://localhost:8000/auth/update/password", body);
+            let res = await req.data;
+            toggleModal();
+        } catch(e){
+            console.log(e);
+        }
+    }
+
+    useEffect(function() {
+
+        if (password.password && password.confirm) {
+
+            setMatching(password.password === password.confirm);
+        }
+
+    }, [password.password, password.confirm])
+
   return ( 
     <Modal 
     topContent={<ForgotModalTop closeModal={toggleModal} />} 
-    content={step === 1 ? <ForgotFormOne setCredential={changeCredential} error ={error}/>: <ForgotFormTwo email={userInfo.email} phone={userInfo.phone}/>}
-     bottomContent={step === 1 ? <ForgotButtonOne value={credential } handleClick={searchUser} /> : <ForgotButtonTwo onConcel={toggleModal} sendCode={sendResetPasswordCode} />}
+
+    content={determineForgotFormContent({
+        step: step,
+        setCredential: 
+        changeCredential, 
+        errro: error, 
+        email: userInfo.email, 
+        phone: userInfo.phone, 
+        updateCode: changeUserInputCode, 
+        valid:!error,
+        updatePassword: updatePassword,
+        matching: matching
+     })}
+
+    bottomContent={determineForgotButton({
+        step: step, 
+        credential:
+        credential, 
+        searchUser:
+        searchUser, 
+        concel:toggleModal,
+        sendCode: sendResetPasswordCode,
+        formThreeActive: userInputCode? true: false, 
+        checkCode: checkCode,
+        back: ()=> setStep(2),
+        submitNewPassword: sendPassword,
+        formFourActive: password.password && matching ? true: false
+    })}
      />
   )
 }

@@ -5,7 +5,7 @@ import { LoginFormOne } from '../LoginForms/LoginFormOne';
 
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/Store';
-import { LoginFromTwo } from '../LoginForms/LoginFromTwo';
+import { LoginFormTwo } from '../LoginForms/LoginFormTwo';
 import { LoginButton } from '../LoginButton/LoginButton';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,11 +14,12 @@ import { useNavigate } from 'react-router-dom';
 interface LogingModalProps {
     toggleModal(): void;
     toggleRegister(): void;
+    toggleForgot(): void;
 }
 
 
 
-export function LogingModal({toggleModal, toggleRegister}:LogingModalProps): React.ReactElement {
+export function LogingModal({toggleModal, toggleRegister, toggleForgot}:LogingModalProps): React.ReactElement {
 
 
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ export function LogingModal({toggleModal, toggleRegister}:LogingModalProps): Rea
 
   return (
     <Modal topContent={<LoginModalTop closeModal={toggleModal}/>}
-            content={state.username ? <LoginFromTwo setPassword={handlePassword}/>:<LoginFormOne noAccount={openRegister}/>} 
+            content={state.username ? <LoginFormTwo setPassword={handlePassword} forgot={toggleForgot}/>:<LoginFormOne noAccount={openRegister} forgot={toggleForgot} />} 
             bottomContent={state.username ? <LoginButton username={state.username} password={password}/>: <></>}/>
   )
 }

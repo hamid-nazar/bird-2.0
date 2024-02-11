@@ -14,11 +14,12 @@ import './LoginForms.css';
 
 interface LoginFromTwoProps {
     setPassword(e: React.ChangeEvent<HTMLInputElement>):void;
+    forgot():void
 }
 
 
 
-export function LoginFromTwo({setPassword}:LoginFromTwoProps): React.ReactElement {
+export function LoginFormTwo({setPassword, forgot}:LoginFromTwoProps): React.ReactElement {
 
     const state = useSelector((state:RootState) => state.user);
 
@@ -57,7 +58,7 @@ export function LoginFromTwo({setPassword}:LoginFromTwoProps): React.ReactElemen
 
                 {state.error? <p className='login-form-error color-red'> Password is incorrect </p> : <></>}
 
-                <p className='login-form-forgot color-blue'> Forgot Password? </p>
+                <p className='login-form-forgot color-blue' onClick={forgot}> Forgot Password? </p>
 
             </div>
         </div>

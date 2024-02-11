@@ -22,7 +22,7 @@ export function Landing():React.ReactElement {
   
   const [register, setRegister] = useState<boolean>(false);
   const [login, setLogin] = useState<boolean>(false);
-  const[fogotPassword, setForgotPassword] = useState<boolean>(true);
+  const[forgotPassword, setForgotPassword] = useState<boolean>(false);
 
   function toggleRegister():void {
     setRegister(!register);
@@ -36,8 +36,8 @@ export function Landing():React.ReactElement {
   }
 
   function toggleForgotPassword():void {
-
-    setForgotPassword(!fogotPassword);
+    setLogin(false);
+    setForgotPassword(!forgotPassword);
   }
 
   return (
@@ -45,9 +45,9 @@ export function Landing():React.ReactElement {
 
       {register ? <RegisterModal toggleModal={toggleRegister}/> : <></> }
 
-      {login ? <LogingModal toggleModal={toggleLogin} toggleRegister={toggleRegister}/> : <></>}
+      {login ? <LogingModal toggleModal={toggleLogin} toggleRegister={toggleRegister} toggleForgot={toggleForgotPassword}/> : <></>}
 
-     { fogotPassword? <ForgotPasswordModal toggleModal={toggleForgotPassword}/>: <></>}
+     { forgotPassword? <ForgotPasswordModal toggleModal={toggleForgotPassword}/>: <></>}
 
         <div className='landing-layout'>
 

@@ -16,7 +16,7 @@ export function ForgotModalTop({closeModal}:ForgotModalTopProps):React.ReactElem
   return (
     <div className='forgot-modal-top'>
 
-      <div className='forgot-modal-top-left'>
+      <div className='forgot-modal-top-left' onClick={closeModal}>
 
         <div className='forgot-modal-top-shadow'>
             x

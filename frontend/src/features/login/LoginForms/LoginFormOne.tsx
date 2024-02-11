@@ -16,12 +16,13 @@ import './LoginForms.css';
 
 
 interface LoginFormOneProps{
-    noAccount():void
+    noAccount():void;
+    forgot(): void;
 }
 
 
 
-export function LoginFormOne({noAccount}:LoginFormOneProps): React.ReactElement {
+export function LoginFormOne({noAccount, forgot}:LoginFormOneProps): React.ReactElement {
 
     const state = useSelector((state:RootState) => state.user);
     const dispatch:AppDispatch = useDispatch();
@@ -127,7 +128,8 @@ export function LoginFormOne({noAccount}:LoginFormOneProps): React.ReactElement 
             fontSize={16}
             fontWeight={700}
             hoverBackground={{r: 83, g: 100, b: 113, a: 0.2}}
-            hoverBorder={{r: 211, g: 211, b: 211, a: 1.0}}>
+            hoverBorder={{r: 211, g: 211, b: 211, a: 1.0}}
+            onClick={forgot}>
                 
             Forgot password?
         </ModalButton>
