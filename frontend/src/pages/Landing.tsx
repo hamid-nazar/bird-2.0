@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import RegisterModal from '../features/register';
 import { RightSideBar } from '../features/landing';
@@ -12,6 +12,8 @@ import { AppDispatch } from '../redux/Store';
 import { useDispatch } from 'react-redux';
 import { resetUsername } from '../redux/Slices/UserSlice';
 import ForgotPasswordModal from '../features/forgotpassword';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -23,6 +25,9 @@ export function Landing():React.ReactElement {
   const [register, setRegister] = useState<boolean>(false);
   const [login, setLogin] = useState<boolean>(false);
   const[forgotPassword, setForgotPassword] = useState<boolean>(false);
+
+  const[jwt, setJwt, removJwt] = useLocalStorage("token", "");
+  const navigate = useNavigate();
 
   function toggleRegister():void {
     setRegister(!register);
@@ -40,6 +45,15 @@ export function Landing():React.ReactElement {
     setForgotPassword(!forgotPassword);
   }
 
+  useEffect(function(){
+    console.log(jwt);
+    if(jwt !== ""){
+      navigate("/home");
+    }
+
+  },[jwt]);
+
+  
   return (
     <div className='home-container bg-color'>
 

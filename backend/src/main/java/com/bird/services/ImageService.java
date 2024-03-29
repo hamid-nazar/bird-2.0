@@ -21,7 +21,7 @@ public class ImageService {
 	
 	private final ImageRepository imageRepository;
 	
-	private static final File DIRECTORY = new File("/Users/hamidnazari/Desktop/Twitter/backend/img");
+	private static final File DIRECTORY = new File("/Users/hamidnazari/Desktop/Java-projects/Twitter/backend/img");
 	
 	private static final  String URL = "http://localhost:8000/images/";
 	

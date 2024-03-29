@@ -49,6 +49,7 @@ export const verifyUsername = createAsyncThunk("user/username", async function(b
     try{
 
         const req = await axios.post('http://localhost:8000/auth/find', body);
+
         return req.data;
 
     } catch(error){
@@ -56,6 +57,23 @@ export const verifyUsername = createAsyncThunk("user/username", async function(b
        return thunkAPI.rejectWithValue(error);
     }
     
+})
+
+export const getUserByToken = createAsyncThunk("user/get", async function(token: string, thunkAPI){
+
+    try{
+        const req = await axios.get(`http://localhost:8000/user/verify`,
+        {headers:{
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    return req.data;
+
+    }catch(error){
+
+        return thunkAPI.rejectWithValue(error);
+    }
 })
 
 export const UserSlice = createSlice({
@@ -168,6 +186,39 @@ export const UserSlice = createSlice({
 
             return state;
         });
+
+        builder.addCase(getUserByToken.pending, (state, action) => {
+            state = {
+                ...state,
+                error: false
+            }
+
+            return state;
+        })
+
+        builder.addCase(getUserByToken.fulfilled, (state, action) => {
+
+            console.log(action.payload);
+
+            state = {
+                ...state,
+                loggedIn: action.payload,
+                username: action.payload.username
+            }
+
+            return state;
+            
+        })
+
+        builder.addCase(getUserByToken.rejected, (state, action) => {
+
+            state = { 
+                ...state,
+                error: true
+              }
+
+            return state;
+        })
 
 }
 

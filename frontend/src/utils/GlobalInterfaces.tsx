@@ -81,3 +81,37 @@ export interface ModalButtonProps {
     hoverBackground: RGBA;
     hoverBorder?: RGBA;
 }
+
+
+export interface SVGProps {
+    width: number;
+    height: number;
+    color?: string;
+}
+
+
+
+export interface PostImage {
+    imageId: number;
+    imageName: string;
+    imageType: string;
+    imageUrl: string;
+}
+
+
+export interface Post{
+    postId: number;
+    content: string;
+    postedDate?: Date;
+    author: User;
+    bookmarks?: User[];
+    replies?:Post[];
+    likes: User[];
+    images: PostImage[];
+    reposts: User[];
+    views: User[];
+    scheduled: boolean;
+    scheduledDate?: Date;
+    audience: 'EVERYONE' | 'CIRCLE';
+    replyRestriction: 'EVERYONE' | 'FOLLOW' |'CIRCLE' | 'MENTION';
+}

@@ -17,6 +17,9 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -53,16 +56,37 @@ public class SecurityConfiguration {
 		return new ProviderManager(provider);
 	}
 	
+	
+	@Bean
+	public CorsConfigurationSource configurationSource() {
+		
+		CorsConfiguration configuration = new CorsConfiguration();
+		
+		configuration.addAllowedOrigin("*");
+		configuration.addAllowedHeader("*");
+		configuration.addAllowedMethod("*");
+		
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		
+		source.registerCorsConfiguration("/**", configuration);
+		
+		
+		return source;
+	}
+	
 	@Bean
 	 public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 	
 		return http
 				.csrf(csrf -> csrf.disable())
-				.authorizeRequests(auth -> auth
+				.cors((cors)-> cors.disable())
+				.cors().configurationSource(configurationSource()).and()
+						.authorizeRequests(auth -> auth
 						.mvcMatchers("/auth/**").permitAll()
 						.mvcMatchers("/images/**").permitAll()
 						.mvcMatchers("/user/followers/**").permitAll()
 						.mvcMatchers("/user/following/**").permitAll()
+						.mvcMatchers("/posts/id/**").permitAll()
 						.anyRequest().authenticated()
 				)
 				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)

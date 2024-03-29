@@ -42,6 +42,7 @@ public class BirdBackendApplication {
 			u.setEmail("ginom23365@seosnaps.com");
 			u.setUsername("unknownkoder");
 			u.setPhone("5555555555");
+			u.setNickname("The Coder");
 			u.setPassword(encoder.encode("password"));
 			u.setEnabled(true);
 			
