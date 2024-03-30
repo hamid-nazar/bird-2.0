@@ -43,8 +43,7 @@ export function Home(): React.ReactElement {
   },[state.token]);
 
 
-  console.log(state.loggedIn);
-  console.log(state.token);
+  
   return (
     <div className="home">
 

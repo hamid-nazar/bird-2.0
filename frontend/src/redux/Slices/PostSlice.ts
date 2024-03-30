@@ -5,7 +5,7 @@ import axios from "axios";
 
 
 
-interface PostSliceState {
+export interface PostSliceState {
     loading: boolean;
     error: boolean;
     currentPost: Post | undefined;

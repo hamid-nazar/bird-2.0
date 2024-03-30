@@ -1,6 +1,6 @@
 package com.bird.models;
 
 public enum ReplyRestriction {
-	EVERYONE, FOLLOW, MENTION 
+	EVERYONE, FOLLOW, CIRCLE, MENTION
 
 }

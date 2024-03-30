@@ -46,7 +46,7 @@ export function Landing():React.ReactElement {
   }
 
   useEffect(function(){
-    console.log(jwt);
+    
     if(jwt !== ""){
       navigate("/home");
     }

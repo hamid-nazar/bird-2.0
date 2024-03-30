@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 import { Link } from 'react-router-dom'
-import { ExpandMore } from '@mui/icons-material'
 import GlobeSVG from './../../../../components/SVGs/GlobeSVG'
 
 
@@ -19,6 +18,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../../../redux/Store'
 import { Post } from '../../../../utils/GlobalInterfaces'
 import { createPost, initializeCurrentPost, updateCurrentPost } from '../../../../redux/Slices/PostSlice'
+import { FeedPostAudienceDropDown } from '../FeedPostAudienceDropDown/FeedPostAudienceDropDown'
+import { FeedPostReplyRestrictionDropDown } from '../FeedPostReplyRestrictionDropDown/FeedPostReplyRestrictionDropDown'
+
 
 export function FeedPostCreator() {
 
@@ -102,8 +104,6 @@ export function FeedPostCreator() {
             textAreaRef.current.blur();
             // textAreaRef.current.value = "";
             setPostContent("");
-
-            console.log(textAreaRef.current.value);
         }
 
     }
@@ -115,7 +115,7 @@ export function FeedPostCreator() {
             setPostContent("");
         }
 
-        console.log(postContent);
+        return function() {}
 
     },[state.post.currentPost]);
 
@@ -129,10 +129,7 @@ export function FeedPostCreator() {
 
         <div className='feed-post-creator-right'>
 
-            <div className={active ? 'feed-post-creator-audience' : 'feed-post-creator-audience hide'}> 
-                Everyone
-                <ExpandMore sx={{ fontSize: "22px",   }}/>
-            </div>
+            { active? <FeedPostAudienceDropDown/>: <></>}       
 
             <textarea
                     className={active ? "feed-post-creator-input input-active" : "feed-post-creator-input"}
@@ -144,10 +141,8 @@ export function FeedPostCreator() {
                     value={ postContent}
                 />
 
-            <div className={active ? 'feed-post-creator-reply' : 'feed-post-creator-reply hide'}>
-                <GlobeSVG width={14} height={14} color={"#1DA1F2"} />    
-                Everyone Can Reply
-            </div>
+            
+           {active? <FeedPostReplyRestrictionDropDown/>: <></>}
 
             <div className={active ? 'feed-post-creator-bottom-icons icons-border' : 'feed-post-creator-bottom-icons'}>
 
